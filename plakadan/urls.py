@@ -25,6 +25,7 @@ urlpatterns = [
     path('', plates_views.index, name='index'),
     path('logout/', plates_views.logout_view, name='logout'),
     path('add-plate/', plates_views.add_plate, name='add-plate'),
+    path('call/<slug:plate_number>/', plates_views.call, name='call'),
     path('login-control/', plates_views.login_controller, name='login-controller'),
     path('register-control/', plates_views.register_controller, name='register-controller'),
     path('profile-update-control/', plates_views.profile_update_controller, name='profile-update-controller'),

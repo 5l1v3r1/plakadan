@@ -39,6 +39,24 @@ def add_plate(request):
     return redirect('index')
 
 
+def sendNotificationTo(request, phone_number):
+    """ Represented SMS Sender, Add Your Sender Here"""
+    print(phone_number)
+    messages.info(request, 'Kullanıcıya SMS gönderildi.')
+
+
+def call(request, plate_number):
+    if request.user.is_authenticated:
+        try:
+            plate = Plate.objects.get(plate=plate_number)
+            sendNotificationTo(request, plate.owner.phone_number)
+        except:
+            messages.warning(request, 'Plaka kayıtlı değil')
+    else:
+        messages.warning(request, 'Giriş Yapmamışsınız')
+    return redirect('index')
+
+
 def login_controller(request):
     if request.method == "POST":
         username, password = request.POST['username'], request.POST['password']
