@@ -39,7 +39,20 @@ def add_plate(request):
     return redirect('index')
 
 
-def sendNotificationTo(request, phone_number):
+def delete_plate(request, plate_number):
+    if request.user.is_authenticated:
+        try:
+            plate = Plate.objects.get(plate=plate_number, owner=request.user)
+            plate.delete()
+            messages.success(request, plate.plate + ' plakası silindi.')
+        except:
+            messages.warning(request, 'Bu plaka kaydı silinemedi.')
+    else:
+        messages.warning(request, 'Giriş Yapmamışsınız')
+    return redirect('index')
+
+
+def send_notification_to(request, phone_number):
     """ Represented SMS Sender, Add Your Sender Here"""
     print(phone_number)
     messages.info(request, 'Kullanıcıya SMS gönderildi.')
@@ -49,7 +62,7 @@ def call(request, plate_number):
     if request.user.is_authenticated:
         try:
             plate = Plate.objects.get(plate=plate_number)
-            sendNotificationTo(request, plate.owner.phone_number)
+            send_notification_to(request, plate.owner.phone_number)
         except:
             messages.warning(request, 'Plaka kayıtlı değil')
     else:
