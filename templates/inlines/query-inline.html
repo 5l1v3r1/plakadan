@@ -5,8 +5,12 @@
         Araç kullanıcısını çağırmak için aşağıdaki butona tıklayınız.<br>
         Güvenlik nedeniyle sadece kullanıcıya bildirim gönderilebilir. Araç sahibi ile doğrudan iletişim kurmanıza izin verilmez.
     </small></p>
-    <a class="btn btn-primary" href="#" data-href="/call/{{ plate }}"
-       data-toggle="modal" data-target="#confirm-call">Kullanıcıyı Çağır</a>
+    <p><button type="button" class="btn btn-primary" href="#" data-href="/call/{{ plate }}"
+         {% if not user.is_authenticated %}disabled{% endif %}
+         data-toggle="modal" data-target="#confirm-call">Kullanıcıyı Çağır</button></p>
+    {% if not user.is_authenticated %}
+        <p class="text-danger">Kullanıcıyı çağırmak için önce hesabım sayfasından giriş yapmış olmanız gerekmektedir.</p>
+    {% endif %}
     <div class="modal fade" id="confirm-call" tabindex="-1" role="dialog" aria-labelledby="Onayla" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

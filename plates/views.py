@@ -1,9 +1,7 @@
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.urls import reverse
 
 from plates.forms import RegistrationForm, UpdateProfileForm
 from plates.models import Plate
@@ -19,12 +17,13 @@ def index(request):
                 messages.warning(request, 'Bu plaka sistemde kayıtlı değil!')
     if request.user.is_authenticated:
         update_profile_form = UpdateProfileForm(instance=request.user)
+        plates = Plate.objects.all().filter(owner=request.user)
     else:
         register_form = RegistrationForm()
-    plates = Plate.objects.all().filter(owner=request.user)
     return render(request, "index.html", locals())
 
 
+@login_required(login_url='/')
 def add_plate(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
@@ -39,6 +38,7 @@ def add_plate(request):
     return redirect('index')
 
 
+@login_required(login_url='/')
 def delete_plate(request, plate_number):
     if request.user.is_authenticated:
         try:
@@ -52,12 +52,14 @@ def delete_plate(request, plate_number):
     return redirect('index')
 
 
+@login_required(login_url='/')
 def send_notification_to(request, phone_number):
     """ Represented SMS Sender, Add Your Sender Here"""
     print(phone_number)
     messages.info(request, 'Kullanıcıya SMS gönderildi.')
 
 
+@login_required(login_url='/')
 def call(request, plate_number):
     if request.user.is_authenticated:
         try:
@@ -99,6 +101,7 @@ def register_controller(request):
     return redirect('index')
 
 
+@login_required(login_url='/')
 def profile_update_controller(request):
     if request.method == 'POST':
         update_profile_form = UpdateProfileForm(request.POST, instance=request.user)
