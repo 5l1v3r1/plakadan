@@ -13,6 +13,44 @@
 
     <script src="{% static "js/jquery-3.3.1.min.js" %}"></script>
     <script src="{% static "js/bootstrap.bundle.min.js" %}"></script>
+
+    <script type="text/javascript">
+        //ALERTS
+        function newAlertAutoClose(type, message) {
+            const alerts = document.getElementById("alerts");
+            //generate new alert
+            alerts.innerHTML =
+                '<div class="alert alert-'+type+' alert-dismissible autoclosealert" role="alert">'
+                +    message
+                +    '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
+                +        '<span aria-hidden="true">&times;</span>'
+                +    '</button>'
+                +'</div>'
+                + alerts.innerHTML;
+            //show new alert
+            $(".autoclosealert:first-child").fadeIn(300, function(){$(this).addClass("show")});
+            //remove old alert after 5 secs
+            setTimeout(function(){
+                $(".autoclosealert:last-child").slideUp(200, function (){$(this).remove()})
+            }, 5000);
+        }
+        function newAlert(type,message) {
+            const alerts = document.getElementById("alerts");
+            //generate new alert
+            alerts.innerHTML =
+                '<div class="alert alert-' + type + ' alert-dismissible btalert" role="alert">'
+                + message
+                + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
+                + '<span aria-hidden="true">&times;</span>'
+                + '</button>'
+                + '</div>'
+                + alerts.innerHTML;
+            //show new alert
+            $(".btalert:first-child").fadeIn(300, function () {
+                $(this).addClass("show")
+            });
+        }
+    </script>
     {% block inhead %}{% endblock %}
 </head>
 <body class="bg-light">

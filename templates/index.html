@@ -1,20 +1,24 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block header %}{% endblock %}
+{% block header %}
+    <div class="alerts fixed-bottom">
+        <div class="container" id="alerts"></div>
+    </div>
+{% endblock %}
 {% block main %}
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-lg-9 col-xl-8 mx-auto">
-                <div>
-                    <a class="navbar-brand" href="#">
-                        <img src="/media/default.png" width="30" height="30" alt="">
+                <div class="page-head my-4">
+                    <a class="navbar-brand" href="{% url "index" %}">
+                        <img class="main-logo" src="/media/default.png" alt="">
                     </a>
                 </div>
-                <div class="web-app card text-center">
+                <div class="web-app shadow-lg card">
                     <div class="card-header">
                         <nav>
-                            <div class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
+                            <div class="nav nav-tabs card-header-tabs" id="web-app-nav-tab" role="tablist">
                                 <a class="nav-item nav-link active" id="nav-query-tab" data-toggle="tab" href="#nav-query" role="tab" aria-controls="nav-query" aria-selected="true">Sorgula</a>
                                 <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Hesabım</a>
                                 <a class="nav-item nav-link" id="nav-messages-tab" data-toggle="tab" href="#nav-messages" role="tab" aria-controls="nav-messages" aria-selected="false">Mesajlar</a>
@@ -22,17 +26,28 @@
                         </nav>
                     </div>
                     <div class="card-body tab-content" id="nav-tabContent">
-                        <div class="tab-pane fade show active" id="nav-query" role="tabpanel" aria-labelledby="nav-query-tab">
-                            <h5 class="card-title">Special title treatment</h5>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        <div class="tab-pane py-5 fade show active text-center" id="nav-query" role="tabpanel" aria-labelledby="nav-query-tab">
+                            {% include "inlines/query-inline.html" %}
                         </div>
-                        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
-                        <div class="tab-pane fade" id="nav-messages" role="tabpanel" aria-labelledby="nav-messages-tab">...</div>
+                        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                            {% include "inlines/profile-inline.html" %}
+                        </div>
+                        <div class="tab-pane fade" id="nav-messages" role="tabpanel" aria-labelledby="nav-messages-tab">
+                            {% include "inlines/messages-inline.html" %}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 {% endblock %}
-{% block footer %}{% endblock %}
+{% block footer %}
+    {% if messages %}
+        <script type="text/javascript">
+            {% for message in messages %}
+                newAlertAutoClose('{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}', '{{ message }}');
+            {% endfor %}
+        </script>
+    {% endif %}
+
+{% endblock %}

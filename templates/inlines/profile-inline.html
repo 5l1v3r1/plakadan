@@ -1,0 +1,128 @@
+{% if user.is_authenticated %}
+    <ul class="list-group">
+        <li class="list-group-item disabled">
+            <small >Kullanıcı Adı:</small>
+            <strong class="border-bottom">{{ user }}</strong>
+        </li>
+        <li class="list-group-item">
+            <small>İsim:</small>
+            <strong class="border-bottom">{{ user.first_name }}</strong>
+        </li>
+        <li class="list-group-item">
+            <small>Soyisim:</small>
+            <strong class="border-bottom">{{ user.last_name }}</strong>
+        </li>
+        <li class="list-group-item">
+            <small>Eposta:</small>
+            <strong class="border-bottom">{{ user.email }}</strong>
+        </li>
+        <li class="list-group-item">
+            <small>Cep Telefonu:</small>
+            <strong class="border-bottom">{{ user.phone_number }}</strong>
+        </li>
+        <li class="list-group-item">
+            <small>Plakalarım:</small>
+            {% if plates %}
+            <ul class="list-group list-group-flush">
+                {% for plate in plates %}
+                    <li class="list-group-item">{{ plate }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+                <p>- Henüz Plaka Kaydetmemişsiniz -</p>
+            {% endif %}
+        </li>
+    </ul>
+    <div class="mt-4">
+    <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#updateProfile">Bilgilerimi güncelle</button>
+    <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addPlate">Plaka Ekle</button>
+    <a href="{% url "logout" %}" class="btn btn-sm btn-danger">Çıkış Yap</a>
+    </div>
+    <div class="modal fade" id="updateProfile" tabindex="-1" role="dialog" aria-labelledby="updateProfileTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form action="profile-update-control/" method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateProfileTitle">Bilgilerimi Güncelle</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                            {% csrf_token %}
+                            {{ update_profile_form.as_p }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                        <button type="submit" class="btn btn-primary">Değişiklikleri Kaydet</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade" id="addPlate" tabindex="-1" role="dialog" aria-labelledby="addPlateTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form action="add-plate/" method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addPlateTitle">Plaka Ekle</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        <div class="input-group mx-auto">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="plate-title">Plaka:</span>
+                            </div>
+                            <input type="text" name="new-plate-number" class="form-control" placeholder="34PLK34" aria-label="34PLK34" aria-describedby="plate-title" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                        <button type="submit" class="btn btn-primary">Plaka Ekle</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% else %}
+    <div class="login-register-tab mx-auto card">
+        <nav class="card-header">
+            <div class="nav nav-pills nav-justified" id="profile-nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-login-tab" data-toggle="tab" href="#nav-login" role="tab" aria-controls="nav-login" aria-selected="true">Giriş Yap</a>
+                <a class="nav-item nav-link" id="nav-register-tab" data-toggle="tab" href="#nav-register" role="tab" aria-controls="nav-register" aria-selected="false">Üye Ol</a>
+            </div>
+        </nav>
+        <div class="card-body tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-login" role="tabpanel" aria-labelledby="nav-login-tab">
+                <form action="login-control/" method="POST" class="form-signin">
+                    {% csrf_token %}
+                    <label for="inputUsername" class="sr-only">Kullanıcı Adı</label>
+                    <input type="text" name="username" id="inputUsername" class="form-control" placeholder="Kullanıcı Adı" required="" autofocus="" maxlength="254">
+                    <label for="inputPassword" class="sr-only">Parola</label>
+                    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Parola" required="">
+                    <button class="btn btn-primary btn-block" type="submit">Giriş</button>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="nav-register" role="tabpanel" aria-labelledby="nav-register-tab">
+                <form action="register-control/" method="post">
+                    {% csrf_token %}
+                    {% for field in register_form %}
+                        <p>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <small style="color: grey">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% for error in field.errors %}
+                                <p style="color: red">{{ error }}</p>
+                            {% endfor %}
+                        </p>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary">Hesap Oluştur</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endif %}

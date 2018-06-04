@@ -140,3 +140,6 @@ STATICFILES_FINDERS = (
 )
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+# View Messages
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
