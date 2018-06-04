@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main %}
+    <main class="full-wrapper">
+        <div class="alerts fixed-bottom">
+            <div class="container" id="alerts"></div>
+        </div>
+        <form class="form-signin" action="{% url 'login' %}" method="POST">
+            {% csrf_token %}
+            <img class="mb-4 login-logo" src="{{ settings.logo.url }}" alt="Login Logo">
+            <h1 class="h3 mb-3 font-weight-bold">{{ settings.company_name }}</h1>
+            <label for="inputUsername" class="sr-only">Kullanıcı Adı</label>
+            <input type="text" name="username" id="inputUsername" class="form-control" placeholder="Kullanıcı Adı" required="" autofocus="" maxlength="254">
+            <label for="inputPassword" class="sr-only">Parola</label>
+            <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Parola" required="">
+            <!--
+            <div class="checkbox mb-3">
+                <label>
+                    <input type="checkbox" value="remember-me"> Remember me
+                </label>
+            </div>
+            -->
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Giriş</button>
+            <p class="mt-5 mb-3 text-muted">©{% now "Y" %} <a href="//mesebilisim.com">Meşe Bilişim.</a> All right reserved.</p>
+        </form>
+    </main>
+{% endblock %}
+{% block footer %}
+    {% if msg %}
+        <script type="text/javascript">
+            {% for message in msg %}
+                {% for content,type in message.items %}
+                    newAlertAutoClose('{{ type }}', '{{ content }}');
+                {% endfor %}
+            {% endfor %}
+        </script>
+    {% endif %}
+{% endblock %}
