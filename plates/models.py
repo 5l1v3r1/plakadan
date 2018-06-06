@@ -34,8 +34,8 @@ class Plate(models.Model):
     def __unicode__(self): return '{}'.format(self.plate)
 
 
-class Message(models.Model):
-    related_plate = models.ForeignKey(Plate, related_name="message_plate", on_delete=models.PROTECT)
-    m_from = models.ForeignKey(User, related_name="message_from", on_delete=models.PROTECT)
-    m_to = models.ForeignKey(User, related_name="message_to", on_delete=models.PROTECT)
-    is_read = models.BooleanField(default=False)
+# class Message(models.Model):
+#     related_plate = models.ForeignKey(Plate, related_name="message_plate", on_delete=models.PROTECT)
+#     m_from = models.ForeignKey(User, related_name="message_from", on_delete=models.PROTECT)
+#     m_to = models.ForeignKey(User, related_name="message_to", on_delete=models.PROTECT)
+#     is_read = models.BooleanField(default=False)
